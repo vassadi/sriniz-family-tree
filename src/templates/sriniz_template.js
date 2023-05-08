@@ -1,95 +1,132 @@
-import FamilyTree from '@balkangraph/familytree.js';
+import FamilyTree from '../lib/familytree.js';
 
-FamilyTree.templates.sriniz = Object.assign({}, FamilyTree.templates.base);
+const TEMPLATE_NAME = 'sriniz';
+const MALE_NODE = 'sriniz_male';
+const FEMALE_NODE = 'sriniz_female';
 
-FamilyTree.templates.sriniz.size = [225, 90];
-FamilyTree.templates.sriniz.node =
-  '<rect x="0" y="0" height="90" width="225" stroke-width="1" rx="15" ry="15"></rect>';
+const DECEASED_MALE_NODE = 'sriniz_male_deceased';
+const DECEASED_FEMALE_NODE = 'sriniz_female_deceased';
 
-// heart
-/*<path fill="#d613af" d="M438.482,58.61c-24.7-26.549-59.311-41.655-95.573-41.711c-36.291,0.042-70.938,15.14-95.676,41.694l-8.431,8.909  l-8.431-8.909C181.284,5.762,98.663,2.728,45.832,51.815c-2.341,2.176-4.602,4.436-6.778,6.778 c-52.072,56.166-52.072,142.968,0,199.134l187.358,197.581c6.482,6.843,17.284,7.136,24.127,0.654 c0.224-0.212,0.442-0.43,0.654-0.654l187.29-197.581C490.551,201.567,490.551,114.77,438.482,58.61z"/>*/
-FamilyTree.templates.sriniz.defs = `
-  <g transform="matrix(0.05,0,0,0.05,-8,-15)" id="heart">
-    <image href="heart_in_circle_white.png" height="600" width="600" />
-  </g>
-  <g id="sriniz_male_up">
-    <circle cx="15" cy="15" r="10" fill="#fff" stroke="#fff" stroke-width="1"></circle>
-    ${FamilyTree.icon.ft(15, 15, '#039BE5', 7.5, 7.5)}
-  </g>
+const COLOR_CODE_MALE = '#039BE5';
+const COLOR_CODE_FEMALE = '#FF46A3';
 
-  <g id="sriniz_female_up">
-    <circle cx="15" cy="15" r="10" fill="#fff" stroke="#fff" stroke-width="1"></circle>
-    ${FamilyTree.icon.ft(15, 15, '#FF46A3', 7.5, 7.5)}
-  </g>`;
+const COLOR_CODE_DECEASED_MALE = '#6EC5EE';
+const COLOR_CODE_DECEASED_FEMALE = '#E476C7';
 
-FamilyTree.templates.sriniz.ripple = {
-  radius: 0,
-  color: 'none',
-  rect: null,
-};
-
-// TBD
-FamilyTree.templates.sriniz.link12 =
-  '<path stroke="#686868" stroke-width="1px" fill="none" data-l-id="[{id}][{child-id}]" d="M{xa},{ya} C{xb},{yb} {xc},{yc} {xd},{yd}" />';
-
-// Male
-FamilyTree.templates.sriniz_male = Object.assign(
-  {},
-  FamilyTree.templates.sriniz
-);
-FamilyTree.templates.sriniz_male.node =
-  '<rect x="0" y="0" height="{h}" width="{w}" stroke-width="1" fill="#039BE5" stroke="#aeaeae" rx="15" ry="15"></rect>';
-
-FamilyTree.templates.sriniz_male.field_0 =
-  '<text style="font-size: 16px; font-weight: bold;" fill="#ffffff" x="100" y="30">{val}</text>';
-FamilyTree.templates.sriniz_male.field_1 =
-  '<text style="font-size: 12px; font-weight: bold;" fill="#ffffff" x="100" y="50">{val}</text>';
-
-// Female
-FamilyTree.templates.sriniz_female = Object.assign(
-  {},
-  FamilyTree.templates.sriniz
-);
-FamilyTree.templates.sriniz_female.node =
-  '<rect x="0" y="0" height="{h}" width="{w}" stroke-width="1" fill="#FF46A3" stroke="#aeaeae" rx="15" ry="15"></rect>';
-
-FamilyTree.templates.sriniz_female.field_0 =
-  '<text style="font-size: 16px; font-weight: bold;" fill="#ffffff" x="100" y="30">{val}</text>';
-FamilyTree.templates.sriniz_female.field_1 =
-  '<text style="font-size: 12px; font-weight: bold;" fill="#ffffff" x="100" y="50">{val}</text>';
-
-const expandIconMale =
-  '<circle cx="97" cy="-16" r="10" fill="#039BE5" stroke="#fff" stroke-width="1"><title>Expand</title></circle>' +
-  '<line x1="90" y1="-16" x2="104" y2="-16" stroke-width="1" stroke="#fff"></line>' +
-  '<line x1="97" y1="-23" x2="97" y2="-9" stroke-width="1" stroke="#fff"></line>';
-
-const expandIconFemale =
-  '<circle cx="97" cy="-16" r="10" fill="#FF46A3" stroke="#fff" stroke-width="1"></circle>' +
-  '<line x1="90" y1="-16" x2="104" y2="-16" stroke-width="1" stroke="#fff"></line>' +
-  '<line x1="97" y1="-23" x2="97" y2="-9" stroke-width="1" stroke="#fff"></line>';
-
-FamilyTree.templates.sriniz_male.plus = expandIconMale;
-FamilyTree.templates.sriniz_female.plus = expandIconFemale;
-
-FamilyTree.templates.sriniz_male.minus =
-  '<circle cx="0" cy="0" r="15" fill="#ffffff" stroke="#aeaeae" stroke-width="1"></circle>' +
-  '<line x1="-11" y1="0" x2="11" y2="0" stroke-width="1" stroke="#aeaeae"></line>';
+// Deceased image
+// '<image x="-3" y="-3" xlink:href="wreath.png" width="93" height="93"></image>';
 
 // Image
 const imgTemplate =
   '<clipPath id="ulaImg">' +
-  '<rect  height="75" width="75" x="7" y="7" stroke-width="1" fill="#FF46A3" stroke="#aeaeae" rx="15" ry="15"></rect>' +
+  '<rect  height="75" width="75" x="7" y="7" stroke-width="1" stroke="#aeaeae" rx="15" ry="15"></rect>' +
   '</clipPath>' +
   '<image x="7" y="7" preserveAspectRatio="xMidYMid slice" clip-path="url(#ulaImg)" xlink:href="{val}" width="75" height="75">' +
   '</image>';
 
-FamilyTree.templates.sriniz_male.img_0 = imgTemplate;
-FamilyTree.templates.sriniz_female.img_0 = imgTemplate;
+const circleMenu = {
+  radius: 10,
+  x: 210,
+  y: 50,
+  color: '#fff',
+  stroke: '#aeaeae',
+};
 
-FamilyTree.templates.sriniz_male.up =
-  '<use x="195" y="0" xlink:href="#sriniz_male_up"></use>';
-FamilyTree.templates.sriniz_female.up =
-  '<use x="195" y="0" xlink:href="#sriniz_female_up"></use>';
+const getNodeUp = (templateName, color) => {
+  return `<g id="${templateName}_up">
+  <circle cx="15" cy="15" r="10" fill="#fff" stroke="#fff" stroke-width="1"></circle>
+  ${FamilyTree.icon.ft(15, 15, color, 7.5, 7.5)}
+</g>`;
+};
+
+const getNodePlus = (templateName, color) => {
+  return `
+  <g id="${templateName}_plus" style="cursor:pointer;">
+  <circle cx="97" cy="-16" r="10" fill="${color}" stroke="#fff" stroke-width="1"></circle>
+  <line x1="90" y1="-16" x2="104" y2="-16" stroke-width="1" stroke="#fff"></line>
+  <line x1="97" y1="-23" x2="97" y2="-9" stroke-width="1" stroke="#fff"></line>
+  </g>`;
+};
+
+// Creating a template from base
+const createTemplate = () => {
+  FamilyTree.templates[TEMPLATE_NAME] = Object.assign(
+    {},
+    FamilyTree.templates.base
+  );
+  FamilyTree.templates[TEMPLATE_NAME].size = [225, 90];
+  FamilyTree.templates[TEMPLATE_NAME].node = `
+  <rect x="0" y="0" height="90" width="225" stroke-width="1" rx="15" ry="15"></rect>`;
+
+  FamilyTree.templates[TEMPLATE_NAME].defs = `
+  <g transform="matrix(0.05,0,0,0.05,-13 ,-12)" id="heart">
+    <path d="M448,256c0-106-86-192-192-192S64,150,64,256s86,192,192,192S448,362,448,256Z" style="fill:#fff;stroke:red;stroke-miterlimit:10;stroke-width:24px" fill="red"></path>
+    <path d="M256,360a16,16,0,0,1-9-2.78c-39.3-26.68-56.32-45-65.7-56.41-20-24.37-29.58-49.4-29.3-76.5.31-31.06,25.22-56.33,55.53-56.33,20.4,0,35,10.63,44.1,20.41a6,6,0,0,0,8.72,0c9.11-9.78,23.7-20.41,44.1-20.41,30.31,0,55.22,25.27,55.53,56.33.28,27.1-9.31,52.13-29.3,76.5-9.38,11.44-26.4,29.73-65.7,56.41A16,16,0,0,1,256,360Z" fill="red"></path>
+  </g>
+
+  <g style="cursor: pointer;" id="sriniz_tree_menu">
+    <rect x="0" y="0" width="25" height="25" fill="transparent"></rect>
+    ${FamilyTree.icon.addUser(50, 50, '#fff', 0, 0)}
+  </g>
+
+  ${getNodePlus(MALE_NODE, COLOR_CODE_MALE)}
+
+  ${getNodePlus(FEMALE_NODE, COLOR_CODE_FEMALE)}
+
+  ${getNodePlus(DECEASED_MALE_NODE, COLOR_CODE_DECEASED_MALE)}
+
+  ${getNodePlus(DECEASED_FEMALE_NODE, COLOR_CODE_DECEASED_FEMALE)}
+
+  ${getNodeUp(MALE_NODE, COLOR_CODE_MALE)}
+
+  ${getNodeUp(FEMALE_NODE, COLOR_CODE_FEMALE)}
+
+  ${getNodeUp(DECEASED_MALE_NODE, COLOR_CODE_DECEASED_MALE)}
+
+  ${getNodeUp(DECEASED_FEMALE_NODE, COLOR_CODE_DECEASED_FEMALE)}
+
+
+  `;
+};
+
+// Create male/female node
+const createNode = (nodeName, colorCode, templateName) => {
+  FamilyTree.templates[nodeName] = Object.assign(
+    {},
+    FamilyTree.templates[templateName || TEMPLATE_NAME]
+  );
+  FamilyTree.templates[
+    nodeName
+  ].node = `<rect x="0" y="0" class="shadow" height="{h}" width="{w}" stroke-width="1" fill="${colorCode}" stroke="#aeaeae" rx="15" ry="15"></rect>`;
+
+  FamilyTree.templates[
+    nodeName
+  ].up = `<use x="195" y="0" xlink:href="#${nodeName}_up"></use>`;
+
+  FamilyTree.templates[
+    nodeName
+  ].plus = `<use xlink:href="#${nodeName}_plus"></use>`;
+
+  if (!templateName) {
+    FamilyTree.templates[nodeName].field_0 =
+      '<text style="font-size: 16px; font-weight: bold;" fill="#ffffff" x="100" y="30">{val}</text>';
+    FamilyTree.templates[nodeName].field_1 =
+      '<text style="font-size: 12px; font-weight: bold;" fill="#ffffff" x="100" y="50">{val}</text>';
+
+    FamilyTree.templates[nodeName].img_0 = imgTemplate;
+  }
+  FamilyTree.templates[nodeName].nodeCircleMenuButton = circleMenu;
+};
+
+createTemplate();
+
+createNode(MALE_NODE, COLOR_CODE_MALE);
+
+createNode(FEMALE_NODE, COLOR_CODE_FEMALE);
+
+createNode(DECEASED_MALE_NODE, COLOR_CODE_DECEASED_MALE, MALE_NODE);
+
+createNode(DECEASED_FEMALE_NODE, COLOR_CODE_DECEASED_FEMALE, FEMALE_NODE);
 
 // Pointer
 FamilyTree.templates.sriniz.pointer1 =

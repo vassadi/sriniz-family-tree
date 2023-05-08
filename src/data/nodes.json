@@ -43,14 +43,13 @@
       "firstName": "Venkatarao",
       "lastName": "Vasadi",
       "gender": "male",
-      "dob": "11/04/1950",
+      "dob": "04/15/1950",
       "dod": "08/27/2021"
     },
     {
       "id": 6,
       "pids": [5],
-      "firstName": "Laxmi",
-      "lastName": "Vasadi",
+      "name": "Laxmi",
       "gender": "female",
       "dob": "01/01/1961"
     },
@@ -274,6 +273,8 @@
       "firstName": "Laxmi",
       "lastName": "Vasadi",
       "gender": "female"
-    }
+    },
+    { "id": 7, "pids": [8], "name": "APR", "gender": "male" },
+    { "id": 8, "pids": [7], "name": "NPV", "gender": "female" }
   ]
 }
